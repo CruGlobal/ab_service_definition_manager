@@ -142,12 +142,12 @@ module.exports = {
 
             return new Promise((resolve, reject) => {
                Promise.resolve()
-                  .then(() => {
-                     // Change innodb_lock_wait_timeout to 1 second to avoid lock table issues
-                     return thisKnex.schema.raw(
-                        "SET GLOBAL innodb_lock_wait_timeout = 1;"
-                     );
-                  })
+                  // .then(() => {
+                  //    // Change innodb_lock_wait_timeout to 1 second to avoid lock table issues
+                  //    return thisKnex.schema.raw(
+                  //       "SET GLOBAL innodb_lock_wait_timeout = 1;"
+                  //    );
+                  // })
                   .then(() => {
                      return thisKnex.schema.raw(
                         "SET SESSION innodb_lock_wait_timeout = 1;"
@@ -652,12 +652,12 @@ ${strErr}
                      }
                      resolve(data);
                   })
-                  .then(() => {
-                     // Change innodb_lock_wait_timeout to 1 second to avoid lock table issues
-                     return thisKnex.schema.raw(
-                        "SET GLOBAL innodb_lock_wait_timeout = 50;"
-                     );
-                  })
+                  // .then(() => {
+                  //    // Change innodb_lock_wait_timeout to 1 second to avoid lock table issues
+                  //    return thisKnex.schema.raw(
+                  //       "SET GLOBAL innodb_lock_wait_timeout = 50;"
+                  //    );
+                  // })
                   .then(() => {
                      return thisKnex.schema.raw(
                         "SET SESSION innodb_lock_wait_timeout = 50;"
