@@ -6,7 +6,7 @@
   "author": "Johnny Hausman",
   "license": "MIT",
   "dependencies": {
-    "@digiserve/ab-utils": "github:CruGlobal/ab-utils#21000dbbf824879837e46efc4df598f3be539899",
+    "@digiserve/ab-utils": "github:CruGlobal/ab-utils#fc2024f170a7b90fafc18913313cfa3d7e4b5510",
     "knex": "^0.21.21",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
