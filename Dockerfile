@@ -21,8 +21,6 @@ ARG BRANCH=master
 
 FROM digiserve/service-cli:${BRANCH}
 
-# Run as non-root to limit impact of compromise
-RUN groupadd -r defmgr && useradd -r -g defmgr -d /app -s /sbin/nologin -c "Definition Manager service" defmgr
 
 COPY . /app
 
@@ -30,18 +28,16 @@ WORKDIR /app
 
 # Reproducible install; use npm i -f only if npm ci fails (e.g. peer deps)
 #RUN npm ci && npm cache clean --force
-RUN npm i -f && npm cache clean --force
+RUN npm i -f 
 
 WORKDIR /app/AppBuilder
 
 #RUN npm ci && npm cache clean --force
-RUN npm i -f && npm cache clean --force
+RUN npm i -f 
 
 WORKDIR /app
 
-RUN chown -R defmgr:defmgr /app
-
-USER defmgr
 
 # --inspect=0.0.0.0:9229 exposes debugger to the network; omit in production or bind to 127.0.0.1
-CMD [ "node", "--inspect=0.0.0.0:9229", "--max-old-space-size=8192", "--stack-size=8192", "app.js" ]
+# CMD [ "node", "--inspect=0.0.0.0:9229", "--max-old-space-size=8192", "--stack-size=8192", "app.js" ]
+CMD [ "node", "--inspect=0.0.0.0:9229", "app.js" ]
