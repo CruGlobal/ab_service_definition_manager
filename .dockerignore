@@ -13,7 +13,8 @@ node_modules
 !.env.example
 *.log
 npm-debug.log*
-config/local.js
+# Our services actually DO want to include this file.
+#config/local.js
 
 # Test and dev
 test
