@@ -17,7 +17,7 @@
 ## Or use: $ DOCKER_ARGS="--platform linux/amd64,linux/arm64 --push" ./build.sh
 ##
 
-ARG BRANCH=master
+ARG BRANCH=multi
 
 FROM digiserve/service-cli:${BRANCH}
 
