@@ -12,7 +12,6 @@
       "lodash": "^4.17.21",
       "moment": "^2.29.1",
       "objection": "^3.1.5",
-      "redis": "^5.10.0",
       "semver": "^7.7.3",
       "serialize-error": "^8.0.1",
       "xml-js": "^1.6.11"
@@ -45,7 +44,6 @@
    },
    "overrides": {
       "@opentelemetry/api": "^1.7.0",
-      "uuid": "^8.3.2",
       "glob": "^13.0.0",
       "acorn-import-assertions": "npm:acorn-import-attributes@^1.9.5"
    }
