@@ -10,11 +10,11 @@ import eslintPluginPrettier from "eslint-plugin-prettier";
 export default [
    js.configs.recommended,
 
-   // Main project: Node + ES2021, Prettier, custom rules
+   // Main project: Node + ES2022, Prettier, custom rules
    {
       files: ["**/*.js"],
       languageOptions: {
-         ecmaVersion: 2021,
+         ecmaVersion: 2022,
          globals: { ...globals.node },
       },
       plugins: { prettier: eslintPluginPrettier },
