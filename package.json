@@ -1,6 +1,6 @@
 {
    "name": "definition_manager",
-   "version": "1.4.9+p11305",
+   "version": "1.4.10",
    "description": "(AppBuilder) A service to manage the definitions for a running AppBuilder platform.",
    "main": "app.js",
    "author": "Johnny Hausman",
@@ -12,7 +12,7 @@
       "lodash": "^4.17.21",
       "moment": "^2.29.1",
       "objection": "^3.1.5",
-      "semver": "^7.7.3",
+      "semver": "^7.7.4",
       "serialize-error": "^8.0.1",
       "xml-js": "^1.6.11"
    },
