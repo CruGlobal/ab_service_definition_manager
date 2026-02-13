@@ -4,9 +4,8 @@ on:
   push:
     branches:
       # Automatically build master and staging. Additional branches may be added.
-      - master
+      - main
       - staging
-      - ecs
   workflow_dispatch:
     # Allows manual build and deploy of any branch/ref
     inputs:
