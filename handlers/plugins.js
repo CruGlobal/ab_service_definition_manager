@@ -3,9 +3,9 @@
  * our Request handler
  */
 
-const getPlugins = require("../AppBuilder/queries/allPlugins.js");
+import getPlugins from "../AppBuilder/queries/allPlugins.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */

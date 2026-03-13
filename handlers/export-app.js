@@ -3,13 +3,13 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
 
-const _ = require("lodash");
-const moment = require("moment");
+import _ from "lodash";
+import moment from "moment";
 
 const IgnoreRoleIDs = [
    "dd6c2d34-0982-48b7-bc44-2456474edbea",
@@ -21,7 +21,7 @@ const IgnoreRoleIDs = [
 // {array} The Role.ids of the default roles installed at creation.
 // we don't need to import these.
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -65,7 +65,6 @@ module.exports = {
       // get the AB for the current tenant
       ABBootstrap.init(req)
          .then(async (AB) => {
-            // eslint-disable-line
             try {
                var ID = req.param("ID");
                var app = AB.applicationByID(ID);
@@ -82,7 +81,7 @@ module.exports = {
                   filename: `app_${_.replace(
                      _.trim(app.name),
                      " ",
-                     "_"
+                     "_",
                   )}_${date}`,
                   date,
                   definitions: [],
@@ -153,7 +152,7 @@ module.exports = {
                // anything we export should NOT carry with it the
                // importedFieldID
                var objectDefs = exportData.definitions.filter(
-                  (d) => d.type == "object"
+                  (d) => d.type == "object",
                );
                objectDefs.forEach((o) => {
                   if (o.json.importedFieldIDs) {
@@ -162,7 +161,7 @@ module.exports = {
                });
 
                var roleIDs = Object.keys(data.roles || {}).filter(
-                  (rid) => IgnoreRoleIDs.indexOf(rid) == -1
+                  (rid) => IgnoreRoleIDs.indexOf(rid) == -1,
                );
                if (roleIDs.length > 0) {
                   const SiteRole = AB.objectRole();
@@ -171,7 +170,7 @@ module.exports = {
                         SiteRole.model().find({
                            where: { uuid: roleIDs },
                            populate: true,
-                        })
+                        }),
                      )) || [];
                   const SiteScope = AB.objectScope();
                   // clean up our entries to not try to include
@@ -188,8 +187,8 @@ module.exports = {
                         req.retry(() =>
                            SiteScope.model().find({
                               where: { uuid: roles[i].scopes },
-                           })
-                        )
+                           }),
+                        ),
                      );
                      if (i % PROMISE_ALL_LIMIT !== 0) continue;
                      (await Promise.all(pendingArrayOfScopes)).forEach(
@@ -199,7 +198,7 @@ module.exports = {
                               s.createdBy = null;
                            });
                            exportData.scopes.push(...scopes);
-                        }
+                        },
                      );
                      pendingArrayOfScopes = [];
                   }
@@ -211,7 +210,7 @@ module.exports = {
                               s.createdBy = null;
                            });
                            exportData.scopes.push(...scopes);
-                        }
+                        },
                      );
                   exportData.roles = roles;
                } else {
@@ -222,7 +221,7 @@ module.exports = {
                let types = ["docxBuilder", "image"];
                let fileNames = (exportData.definitions || [])
                   .filter(
-                     (d) => d.type == "view" && types.indexOf(d.json.key) > -1
+                     (d) => d.type == "view" && types.indexOf(d.json.key) > -1,
                   )
                   .map((f) => f.json.settings.filename)
                   .filter((f) => f);
@@ -232,7 +231,7 @@ module.exports = {
                   (exportData.definitions || [])
                      .filter((d) => d.type == "field" && d.json.key == "image")
                      .map((f) => f.json.settings.defaultImageUrl)
-                     .filter((f) => f)
+                     .filter((f) => f),
                );
 
                await ExportFiles(req, fileNames, exportData.files);
@@ -277,7 +276,7 @@ function ExportFiles(req, list, files) {
 
             // continue with the next one
             ExportFiles(req, list, files).then(resolve).catch(reject);
-         }
+         },
       );
    });
 }

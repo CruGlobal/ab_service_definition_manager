@@ -1,12 +1,4 @@
-const cote = require("cote");
-const path = require("path");
-
-const queryAllDefinitions = require(path.join(
-   __dirname,
-   "..",
-   "queries",
-   "allDefinitions"
-));
+import cote from "cote";
 
 // Instantiate a new Publisher component.
 const definitionPublisher = new cote.Publisher({
@@ -41,7 +33,7 @@ function Publish(req, defs) {
    });
 }
 
-module.exports = {
+export default {
    init: (req) => {
       var tID = req.tenantID();
       if (tID) {
@@ -78,7 +70,6 @@ module.exports = {
                   }]: ${e.toString()}`;
                   var errJson = new Error(msg);
                   throw errJson;
-                  return;
                }
             }
             Publish(req, def);

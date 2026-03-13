@@ -4,7 +4,7 @@
  * table
  */
 
-module.exports = function (req) {
+export default function (req) {
    return new Promise((resolve, reject) => {
       let tenantDB = req.queryTenantDB(reject);
       if (!tenantDB) {
@@ -16,7 +16,7 @@ module.exports = function (req) {
 
       let sql = `SELECT * FROM ${tenantDB}\`appbuilder_definition\``;
 
-      req.query(sql, [], (error, results, fields) => {
+      req.query(sql, [], (error, results, _fields) => {
          if (error) {
             req.log(sql);
             reject(error);
@@ -25,4 +25,4 @@ module.exports = function (req) {
          }
       });
    });
-};
+}

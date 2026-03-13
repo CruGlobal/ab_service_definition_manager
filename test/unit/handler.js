@@ -2,26 +2,19 @@
  * Handler
  * test the interface for our default service handler.
  */
-var path = require("path");
-var _ = require("lodash");
-var expect = require("chai").expect;
+import _ from "lodash";
+import { expect } from "chai";
 
 // Base config value.
-var defaultConfig = require(path.join(
-   __dirname,
-   "..",
-   "..",
-   "config",
-   "definition_manager"
-));
+import defaultConfig from "../../config/definition_manager.js";
 
 // Our service handler:
-var Handler = require(path.join(__dirname, "..", "..", "src", "handler"));
+import Handler from "../../src/handler.js";
 
-describe("definition_manager: handler", function() {
+describe("definition_manager: handler", function () {
    // Check for proper initialization
-   describe("-> missing config", function() {
-      it("should return an error when receiving a job request #missingconfig ", function(done) {
+   describe("-> missing config", function () {
+      it("should return an error when receiving a job request #missingconfig ", function (done) {
          Handler.init(null); // clear the config in case it is already set
          var request = {};
          Handler.fn(request, (err, response) => {
@@ -34,11 +27,11 @@ describe("definition_manager: handler", function() {
    });
 
    // handle a disabled state:
-   describe("-> disabled ", function() {
-      var disabledConfig = _.clone(defaultConfig, true);
+   describe("-> disabled ", function () {
+      var disabledConfig = _.cloneDeep(defaultConfig);
       disabledConfig.enable = false;
 
-      it("should return an error when receiving a job request #disabled ", function(done) {
+      it("should return an error when receiving a job request #disabled ", function (done) {
          Handler.init({ config: disabledConfig });
          var request = {};
          Handler.fn(request, (err, response) => {

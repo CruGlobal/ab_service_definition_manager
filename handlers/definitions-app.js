@@ -3,14 +3,14 @@
  * Gather together the definitions for the specified App
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
 
-const handlerExportApp = require("./export-app.js");
+import handlerExportApp from "./export-app.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -81,12 +81,12 @@ module.exports = {
             data.definitions = data.definitions.concat(
                allIDs
                   .map((id) => AB.definitionByID(id, true))
-                  .filter((def) => def != null)
+                  .filter((def) => def != null),
             );
 
             allAppDefs[ID] = await req.worker(
                (cData) => JSON.stringify(cData),
-               [data]
+               [data],
             );
             AB.cache("defs-app", allAppDefs);
             cb(null, allAppDefs[ID]);

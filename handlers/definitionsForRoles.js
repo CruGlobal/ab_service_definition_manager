@@ -3,9 +3,9 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -59,11 +59,11 @@ module.exports = {
             roleIDs.filter((roleId) => AB.defaultSystemRoles().includes(roleId))
                .length > 0;
          const applications = AB.applications(
-            (a) => isSystemUser || a.isAccessibleForRoles(roles)
+            (a) => isSystemUser || a.isAccessibleForRoles(roles),
          );
 
          req.log(
-            `definition_manager.definitionsForRoles: found ${applications.length} applications to export`
+            `definition_manager.definitionsForRoles: found ${applications.length} applications to export`,
          );
 
          const allIDs = [];
@@ -79,7 +79,7 @@ module.exports = {
 
          req.performance.measure("buildIDHash");
          req.log(
-            `definition_manager.definitionsForRoles: found ${allIDs.length} ids to export.`
+            `definition_manager.definitionsForRoles: found ${allIDs.length} ids to export.`,
          );
          req.performance.mark("stringify-defs-for-role", {
             op: "serialize",
@@ -91,7 +91,7 @@ module.exports = {
                allIDs
                   .map((id) => AB.definitionByID(id, true))
                   .filter((def) => def != null),
-            ]
+            ],
          );
 
          req.performance.measure("stringify-defs-for-role");

@@ -3,9 +3,9 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -70,13 +70,13 @@ module.exports = {
             const dbConn = AB.Knex.connection();
 
             req.log(
-               `Getting Information... Object[${object.id}], Field[${field.id}]`
+               `Getting Information... Object[${object.id}], Field[${field.id}]`,
             );
 
             try {
                const rows = (
                   await dbConn.raw(
-                     `SHOW COLUMNS FROM \`${object.tableName}\` WHERE \`Field\` = '${field.columnName}'`
+                     `SHOW COLUMNS FROM \`${object.tableName}\` WHERE \`Field\` = '${field.columnName}'`,
                   )
                )?.[0];
                cb(null, rows?.[0]);

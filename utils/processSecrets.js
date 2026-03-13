@@ -20,15 +20,15 @@ async function process(values, AB) {
    }
    if (values.secrets) {
       const secrets = values.secrets.filter(
-         ({ name }) => !values.storedSecrets.includes(name)
+         ({ name }) => !values.storedSecrets.includes(name),
       );
       await AB.Secret.create(values.id, ...secrets);
       values.storedSecrets = values.storedSecrets.concat(
-         values.secrets.map((s) => s.name)
+         values.secrets.map((s) => s.name),
       );
       delete values.secrets;
    }
    return values;
 }
 
-module.exports = process;
+export default process;

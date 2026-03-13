@@ -5,9 +5,9 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */

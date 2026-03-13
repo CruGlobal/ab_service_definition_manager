@@ -4,11 +4,11 @@
  * table
  */
 
-module.exports = function (
+export default function (
    req,
    tenantUUID = null,
    fields = [],
-   filterByApplicationUUIDs = []
+   filterByApplicationUUIDs = [],
 ) {
    const DATABASE = `appbuilder-${tenantUUID}`;
    const TABLE = "appbuilder_definition";
@@ -33,4 +33,4 @@ module.exports = function (
          resolve({ tenantUUID, results });
       });
    });
-};
+}
