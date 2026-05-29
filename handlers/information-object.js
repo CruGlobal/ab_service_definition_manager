@@ -43,7 +43,7 @@ module.exports = {
     * @param {fn} cb
     *        a node style callback(err, results) to send data when job is finished
     */
-   fn: function handler(req, cb) {
+   fn: function handler(req, cb, manualReset = false) {
       req.log("definition_manager.information-object:");
 
       // get the AB for the current tenant
@@ -52,9 +52,15 @@ module.exports = {
             const objID = req.param("ID");
             const object = AB.objectByID(objID);
             if (!object) {
-               const err = new Error(`ABObject not found for [${objID}]`);
-               err.code = 404;
-               return cb(err);
+               if (manualReset) {
+                  const err = new Error(`ABObject not found for [${objID}]`);
+                  err.code = 404;
+                  return cb(err);
+               }
+               // attempt a single manual Reset of the definitions:
+               req.log("::: MANUAL RESET DEFINITIONS :::");
+               ABBootstrap.resetDefinitions(req);
+               return handler(req, cb, true);
             }
 
             const dbConn = AB.Knex.connection();
