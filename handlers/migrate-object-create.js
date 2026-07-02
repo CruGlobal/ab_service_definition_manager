@@ -46,23 +46,32 @@ module.exports = {
     * @param {fn} cb
     *        a node style callback(err, results) to send data when job is finished
     */
-   fn: function handler(req, cb) {
+   fn: function handler(req, cb, manualReset = false) {
       req.log("definition_manager.migrate-object-create:");
 
       // get the AB for the current tenant
       ABBootstrap.init(req)
-         .then(async (AB) => { // eslint-disable-line
-
+         .then(async (AB) => {
             var id = req.param("ID");
             var object = AB.objectByID(id);
             if (!object) {
                object = AB.queryByID(id);
             }
+
             if (!object) {
-               var err = new Error(`ABObject not found for [${id}]`);
-               err.code = 403;
-               return cb(err);
+               if (manualReset) {
+                  var err = new Error(`ABObject not found for [${id}]`);
+                  err.code = 403;
+                  err.context =
+                     "Service:definition_manager.migrate-object-create: Error initializing ABFactory";
+                  return cb(err);
+               }
+               // attempt a single manual Reset of the definitions:
+               req.log("::: MANUAL RESET DEFINITIONS :::");
+               ABBootstrap.resetDefinitions(req);
+               return handler(req, cb, true);
             }
+
             try {
                await object.migrateCreate(req);
                cb(null, { status: "success" });
