@@ -3,9 +3,9 @@
  * Return all the SITE_PLUGIN_LINK for a given condition.
  */
 
-const getPluginLinks = require("../AppBuilder/queries/allPluginLinks.js");
+import getPluginLinks from "../AppBuilder/queries/allPluginLinks.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */

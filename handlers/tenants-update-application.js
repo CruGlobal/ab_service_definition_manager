@@ -3,10 +3,10 @@
  * our Request handler.
  */
 
-const getTenants = require("../queries/getTenants");
-const getApplicationsByTenantUUID = require("../queries/getApplicationsByTenantUUID");
+import getTenants from "../queries/getTenants.js";
+import getApplicationsByTenantUUID from "../queries/getApplicationsByTenantUUID.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -57,12 +57,12 @@ module.exports = {
 
       tenantUUIDs.forEach((e) => {
          penddingGetApplicationsByTenantUUIDs.push(
-            getApplicationsByTenantUUID(req, e.uuid, ["id"], [applicationUUID])
+            getApplicationsByTenantUUID(req, e.uuid, ["id"], [applicationUUID]),
          );
       });
 
       const applicationsByTenantUUID = await Promise.all(
-         penddingGetApplicationsByTenantUUIDs
+         penddingGetApplicationsByTenantUUIDs,
       );
 
       const tenantUUIDsFilterByApplication = applicationsByTenantUUID
@@ -98,7 +98,7 @@ module.exports = {
                   }
 
                   resolve();
-               }
+               },
             );
          });
       };

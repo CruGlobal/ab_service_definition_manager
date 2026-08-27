@@ -3,7 +3,7 @@
  * our Request handler.
  */
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */

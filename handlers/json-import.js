@@ -3,13 +3,13 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
-const cacheUpdate = require("../utils/cacheUpdate");
+import cacheUpdate from "../utils/cacheUpdate.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -145,18 +145,18 @@ module.exports = {
                   .then(() => {
                      // Change innodb_lock_wait_timeout to 1 second to avoid lock table issues
                      return thisKnex.schema.raw(
-                        "SET GLOBAL innodb_lock_wait_timeout = 1;"
+                        "SET GLOBAL innodb_lock_wait_timeout = 1;",
                      );
                   })
                   .then(() => {
                      return thisKnex.schema.raw(
-                        "SET SESSION innodb_lock_wait_timeout = 1;"
+                        "SET SESSION innodb_lock_wait_timeout = 1;",
                      );
                   })
                   .then(() => {
                      // Insert all the ABDefinitions for Applications, fields and objects:
                      req.log(
-                        "::: IMPORT : importing initial definitions (Application, Fields, objects)"
+                        "::: IMPORT : importing initial definitions (Application, Fields, objects)",
                      );
                      var allSaves = [];
                      var currDefinitions = [];
@@ -170,7 +170,7 @@ module.exports = {
                                  "query",
                                  "index",
                                  "application",
-                              ].indexOf(d.type) > -1
+                              ].indexOf(d.type) > -1,
                         )
                         .forEach((def) => {
                            hashSaved[def.id] = def;
@@ -180,7 +180,7 @@ module.exports = {
                                  .retry(() =>
                                     AB.definitionCreate(req, def, {
                                        silenceErrors: ["ER_DUP_ENTRY"],
-                                    })
+                                    }),
                                  )
                                  .catch((err) => {
                                     // if that entry already existed
@@ -191,10 +191,10 @@ module.exports = {
                                     ) {
                                        // trying an update instead.");
                                        return req.retry(() =>
-                                          AB.definitionUpdate(req, def.id, def)
+                                          AB.definitionUpdate(req, def.id, def),
                                        );
                                     }
-                                 })
+                                 }),
                            );
                         });
 
@@ -248,7 +248,7 @@ ${err.toString()}
                               error: err,
                               obj: item.toObj(),
                            });
-                        }
+                        },
                      );
                   })
                   .then(() => {
@@ -285,7 +285,7 @@ ${strErr}
                               error: err,
                               indx: item.toObj(),
                            });
-                        }
+                        },
                      ).then(() => {
                         // Now make sure knex has the latest object data
                         (allObjects || []).forEach((object) => {
@@ -322,7 +322,7 @@ ${strErr}
                            let sObj = AB.objectByID(k);
                            if (!sObj) {
                               console.error(
-                                 `Unable to dereference SiteObject [${k}]`
+                                 `Unable to dereference SiteObject [${k}]`,
                               );
                               return;
                            }
@@ -335,7 +335,7 @@ ${strErr}
                                  allConnections.push(field);
                               }
                            });
-                        }
+                        },
                      );
 
                      return migrateCreateSequential(
@@ -353,7 +353,7 @@ ${strErr}
                               error: err,
                               field: item.toObj(),
                            });
-                        }
+                        },
                      );
                   })
                   .then(() => {
@@ -366,17 +366,17 @@ ${strErr}
                            let sObj = AB.objectByID(k);
                            if (!sObj) {
                               console.error(
-                                 `Unable to dereference SiteObject [${k}]`
+                                 `Unable to dereference SiteObject [${k}]`,
                               );
                               return;
                            }
                            let values = sObj.toDefinition().toObj();
                            allSaves.push(
                               req.retry(() =>
-                                 AB.definitionUpdate(req, sObj.id, values)
-                              )
+                                 AB.definitionUpdate(req, sObj.id, values),
+                              ),
                            );
-                        }
+                        },
                      );
                      return Promise.all(allSaves);
                   })
@@ -413,7 +413,7 @@ ${strErr}
                               error: err,
                               indx: item.toObj(),
                            });
-                        }
+                        },
                      ).then(() => {
                         // Now make sure knex has the latest object data
                         (allObjects || []).forEach((object) => {
@@ -425,7 +425,7 @@ ${strErr}
                               let sObj = AB.objectByID(k);
                               if (!sObj) return;
                               sObj.model().modelKnexRefresh();
-                           }
+                           },
                         );
                      });
                   })
@@ -461,7 +461,7 @@ ${strErr}
                               error: err,
                               field: item.toObj(),
                            });
-                        }
+                        },
                      );
                   })
                   .then(() => {
@@ -491,7 +491,7 @@ ${strErr}
                               error: err,
                               query: item.toObj(),
                            });
-                        }
+                        },
                      );
                   })
                   .then(() => {
@@ -499,7 +499,7 @@ ${strErr}
                      var numRemaining =
                         data.definitions.length - Object.keys(hashSaved).length;
                      req.log(
-                        `::: IMPORT : insert remaining definitions #${numRemaining}`
+                        `::: IMPORT : insert remaining definitions #${numRemaining}`,
                      );
                      var allSaves = [];
                      (data.definitions || []).forEach((def) => {
@@ -518,7 +518,7 @@ ${strErr}
                                     return AB.definitionUpdate(
                                        req,
                                        def.id,
-                                       def
+                                       def,
                                     );
                                  }
                                  if (err.code != "ER_DUP_ENTRY") {
@@ -531,7 +531,7 @@ ${strErr}
                                        error: err,
                                     });
                                  }
-                              })
+                              }),
                            );
                         }
                      });
@@ -564,9 +564,9 @@ ${strErr}
                                        return reject(err);
                                     }
                                     resolve();
-                                 }
+                                 },
                               );
-                           })
+                           }),
                         );
                      });
 
@@ -596,11 +596,11 @@ ${strErr}
                                     let strErr = err.toString();
                                     if (strErr.indexOf("ER_DUP_ENTRY") > -1) {
                                        return req.retry(() =>
-                                          SiteScope.model().update(s.uuid, s)
+                                          SiteScope.model().update(s.uuid, s),
                                        );
                                     }
                                     throw err;
-                                 })
+                                 }),
                            );
                            return Promise.all(allScopeSaves);
                         })
@@ -615,12 +615,12 @@ ${strErr}
                                        return req.retry(() =>
                                           SiteRole.model().update(
                                              role.uuid,
-                                             role
-                                          )
+                                             role,
+                                          ),
                                        );
                                     }
                                     throw err;
-                                 })
+                                 }),
                            );
                            return Promise.all(allRoleSaves);
                         });
@@ -655,12 +655,12 @@ ${strErr}
                   .then(() => {
                      // Change innodb_lock_wait_timeout to 1 second to avoid lock table issues
                      return thisKnex.schema.raw(
-                        "SET GLOBAL innodb_lock_wait_timeout = 50;"
+                        "SET GLOBAL innodb_lock_wait_timeout = 50;",
                      );
                   })
                   .then(() => {
                      return thisKnex.schema.raw(
-                        "SET SESSION innodb_lock_wait_timeout = 50;"
+                        "SET SESSION innodb_lock_wait_timeout = 50;",
                      );
                   })
                   .catch((err) => {

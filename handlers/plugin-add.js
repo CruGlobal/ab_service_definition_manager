@@ -3,13 +3,13 @@
  * Process a request to add a Plugin to the ABFactory for this tenant.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
-const { URL } = require("url");
+import { URL } from "url";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
