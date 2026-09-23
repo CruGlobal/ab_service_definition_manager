@@ -3,13 +3,13 @@
  * Process a request to add a Plugin to the ABFactory for this tenant.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
-const { URL } = require("url");
+import { URL } from "url";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -52,7 +52,7 @@ module.exports = {
 
       // get the AB for the current tenant
       try {
-         let AB = await ABBootstrap.init(req); // eslint-disable-line no-unused-vars
+         let AB = await ABBootstrap.init(req);
 
          let urlInput = req.param("url");
          let manifestUrl;
@@ -83,7 +83,7 @@ module.exports = {
 
                if (pathParts.length < 2) {
                   throw new Error(
-                     "Invalid GitHub URL format. Expected: https://github.com/owner/repo"
+                     "Invalid GitHub URL format. Expected: https://github.com/owner/repo",
                   );
                }
 
@@ -101,7 +101,7 @@ module.exports = {
                req.log(`Treating as GitHub URL, fetching from: ${manifestUrl}`);
             } catch (urlError) {
                throw new Error(
-                  `Failed to parse GitHub URL: ${urlError.message}`
+                  `Failed to parse GitHub URL: ${urlError.message}`,
                );
             }
          }
@@ -112,7 +112,7 @@ module.exports = {
 
          if (!response.ok) {
             throw new Error(
-               `Failed to fetch manifest.json (${manifestUrl}): HTTP ${response.status} ${response.statusText}`
+               `Failed to fetch manifest.json (${manifestUrl}): HTTP ${response.status} ${response.statusText}`,
             );
          }
 
@@ -130,7 +130,7 @@ module.exports = {
                   where: {
                      url: manifestUrl,
                   },
-               })
+               }),
             );
 
             let plugin;
@@ -149,8 +149,8 @@ module.exports = {
                         Description: manifest.description,
                         icon: manifest.icon,
                         version: manifest.version,
-                     }
-                  )
+                     },
+                  ),
                );
             } else {
                // Create new plugin
@@ -162,7 +162,7 @@ module.exports = {
                      url: manifestUrl,
                      icon: manifest.icon,
                      version: manifest.version,
-                  })
+                  }),
                );
             }
 
@@ -172,7 +172,7 @@ module.exports = {
                   where: {
                      plugin: plugin.uuid,
                   },
-               })
+               }),
             );
 
             // Create a map of existing links by platform+type for quick lookup
@@ -259,9 +259,9 @@ module.exports = {
                                  url: finalUrl,
                                  platform: pluginEntry.platform,
                                  type: pluginEntry.type,
-                              }
-                           )
-                        )
+                              },
+                           ),
+                        ),
                      );
                   }
                } else {
@@ -274,8 +274,8 @@ module.exports = {
                            url: finalUrl,
                            platform: pluginEntry.platform,
                            type: pluginEntry.type,
-                        })
-                     )
+                        }),
+                     ),
                   );
                }
             }
@@ -289,8 +289,10 @@ module.exports = {
                   req.log(`Removing plugin link: ${linkKey} - not in manifest`);
                   linkOperations.push(
                      req.retry(() =>
-                        PluginLinks.model().destroy({ uuid: existingLink.uuid })
-                     )
+                        PluginLinks.model().destroy({
+                           uuid: existingLink.uuid,
+                        }),
+                     ),
                   );
                }
             }
@@ -305,7 +307,7 @@ module.exports = {
                      uuid: plugin.uuid,
                   },
                   populate: true,
-               })
+               }),
             );
             if (!pluginRecord) {
                throw new Error(`Failed to find plugin record: ${plugin.uuid}`);

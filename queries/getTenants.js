@@ -4,7 +4,7 @@
  * table
  */
 
-module.exports = function (req, fields = [], filterByTenantUUIDs = []) {
+export default function (req, fields = [], filterByTenantUUIDs = []) {
    const DATABASE = "appbuilder-admin";
    const TABLE = "site_tenant";
    const sqlQuery = `SELECT ${
@@ -27,4 +27,4 @@ module.exports = function (req, fields = [], filterByTenantUUIDs = []) {
          resolve(results);
       });
    });
-};
+}

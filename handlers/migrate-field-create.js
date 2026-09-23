@@ -3,12 +3,12 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -47,26 +47,38 @@ module.exports = {
     * @param {fn} cb
     *        a node style callback(err, results) to send data when job is finished
     */
-   fn: function handler(req, cb) {
+   fn: function handler(req, cb, manualReset = false) {
       req.log("definition_manager.migrate-field-create:");
 
       // get the AB for the current tenant
       ABBootstrap.init(req)
-         .then(async (AB) => { // eslint-disable-line
+         .then(async (AB) => {
             var objID = req.param("objID");
             var object = AB.objectByID(objID);
             if (!object) {
-               var err1 = new Error(`ABObject not found for [${objID}]`);
-               err1.code = 403;
-               return cb(err1);
+               if (manualReset) {
+                  var err1 = new Error(`ABObject not found for [${objID}]`);
+                  err1.code = 403;
+                  return cb(err1);
+               }
+               // attempt a single manual Reset of the definitions:
+               req.log("::: MANUAL RESET DEFINITIONS :::");
+               ABBootstrap.resetDefinitions(req);
+               return handler(req, cb, true);
             }
 
             var id = req.param("ID");
             var field = object.fieldByID(id);
             if (!field) {
-               var err2 = new Error(`ABField not found for [${id}]`);
-               err2.code = 403;
-               return cb(err2);
+               if (manualReset) {
+                  var err2 = new Error(`ABField not found for [${id}]`);
+                  err2.code = 403;
+                  return cb(err2);
+               }
+               // attempt a single manual Reset of the definitions:
+               req.log("::: MANUAL RESET DEFINITIONS :::");
+               ABBootstrap.resetDefinitions(req);
+               return handler(req, cb, true);
             }
 
             try {

@@ -1,4 +1,4 @@
-module.exports = (AB) => {
+export default (AB) => {
    console.log("Definitions Cache Cleared!");
    // Clear the cached definitions for role
    AB.cacheClear("defs-for-role");

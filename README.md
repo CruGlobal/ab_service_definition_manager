@@ -5,33 +5,45 @@
 [![Image Size](https://img.shields.io/docker/image-size/digiserve/ab-definition-manager/master?logo=docker&logoColor=white&label=Image%20Size)](https://hub.docker.com/r/digiserve/ab-definition-manager/tags)
 
 # AppBuilder Service Definition Manager
+
 An AppBuilder service to manage the definitions for a running AppBuilder platform.
 
 ## Install
+
 See [ab_cli](https://github.com/CruGlobal/ab-cli)
 
+### ab-utils resolving to 1.10.0 in package-lock.json
+
+If `npm install` resolves `@digiserve/ab-utils` to version **1.10.0** in the lockfile instead of 1.10.2, the git ref `1.10.2` in [CruGlobal/ab-utils](https://github.com/CruGlobal/ab-utils) is pointing at a commit whose `package.json` still has `"version": "1.10.0"`. Fix it in the **ab-utils** repo: ensure the tag `1.10.2` points to a commit where `package.json` has `"version": "1.10.2"`, then here run `rm -rf node_modules package-lock.json && npm install` to regenerate the lockfile.
+
 ## Pull Requests
+
 Pull Requests should be tagged with a label `major`, `minor` or `patch`. Use `major` for breaking changes, `minor` for new features, or `patch` for bug fixes. To merge without creating a release a `skip-release` tag can be added instead.
 
 :pencil: In the pull request body add release notes between these tags:
+
 ```md
 <!-- #release_notes -->
 
-<!-- /release_notes --> 
+<!-- /release_notes -->
 ```
+
 Anything between those 2 lines will be used as release notes when creating a version.
 
 ### When merged:
- - A new version will be created using semantic versioning
- - The version will be updated in `package.json`
- - A new tag and release will be created on GitHub
- - A new docker image will be built, tagged with the version and published to dockerhub
- - A Workflow in `ab_runtime` will be triggered to update the service version file.
+
+-  A new version will be created using semantic versioning
+-  The version will be updated in `package.json`
+-  A new tag and release will be created on GitHub
+-  A new docker image will be built, tagged with the version and published to dockerhub
+-  A Workflow in `ab_runtime` will be triggered to update the service version file.
 
 ## Manually Building a Docker Image
+
 It may be useful to build a custom docker image from a feature branch for testing.
 This can be done through a workflow dispatch trigger.
+
 1. Go to the Actions tab
 2. Select the 'Docker Build Custom' workflow
 3. Select 'run Workflow' and fill in the form
-The image will be built from the selected branch and pushed to dockerhub using the given tags
+   The image will be built from the selected branch and pushed to dockerhub using the given tags

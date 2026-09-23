@@ -3,13 +3,13 @@
  * our Request handler.
  */
 
-const ABBootstrap = require("../AppBuilder/ABBootstrap");
+import ABBootstrap from "../AppBuilder/ABBootstrap.js";
 // {ABBootstrap}
 // responsible for initializing and returning an {ABFactory} that will work
 // with the current tenant for the incoming request.
-const cacheUpdate = require("../utils/cacheUpdate");
+import cacheUpdate from "../utils/cacheUpdate.js";
 
-module.exports = {
+export default {
    /**
     * Key: the cote message key we respond to.
     */
@@ -52,7 +52,7 @@ module.exports = {
 
       // get the AB for the current tenant
       ABBootstrap.init(req)
-         .then((AB) => { // eslint-disable-line
+         .then((AB) => {  
 
             var id = req.param("ID");
 
@@ -94,7 +94,7 @@ module.exports = {
                            }
                            req.performance.measure("broadcast");
                            req.performance.log(["broadcast"]);
-                        }
+                        },
                      );
                   })
 
